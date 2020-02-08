@@ -13,3 +13,36 @@ Optional<String> val2 = Optional.of(null);  //NullPointerException 발생
 Optional<String> val3 = Optional.ofNullable(null);  //ok
 ~~~
 
+## Optional 객체의 값 접근
+get() 메서드를 사용하여 Optional객체에 저장된 값에 접근할 수 있다.  
+값이 null이면 NoSuchElementException이 발생하기 때문에 get()을 호출하기전에 isPresent()메서드를 사용하여 null인지 확인후에 호출하는것이 좋으며, 이를 대비하여 orElse()로 값을 대체할 수 있다.  
+~~~ java
+Optional<String> opt = Optional.of("java");
+System.out.println(opt.get());  //java
+Optional<String> nullOpt = Optional.empty();
+System.out.println(nullOpt.orElse("hello")); //hello
+~~~
+
+null 대신하는 값을 지정하는 메서드로 orElseGet(), orElseThrow()도 있다.
+~~~ java
+Optional<String> nullOpt = Optional.empty();
+System.out.println(nullOpt.orElseGet(String::new));
+System.out.println(nullOpt.orElseThrow(NullPointerException::new)); //null이면 예외 발생
+~~~
+
+## 기본 타입의 Optional 클래스
+IntStream과 같은 기본 타입 스트림을 위한 Optional 클래스들이 있다. (OptionalInt, OptionalLong, OptionalDouble)
+반환 타입이 Optional<T>가 아니라는것을 제외하고 stream에 정의된 것과 비슷하다.  
+클래스 | 값을 반환하는 메서드
+--------- | ---------
+Optional<T> | T get()
+OptionalInt | int getAsInt()
+OptionalLong | long getAsLong()
+OptionalDouble | double getAsDouble()
+
+~~~ java
+IntStream stream = IntStream.of(1, 2, 3, 4);
+OptionalInt result = stream.findFirst();
+System.out.println(result.getAsInt());  //1
+~~~
+
