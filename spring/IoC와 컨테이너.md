@@ -51,9 +51,13 @@ public class Customer {
     public Customer(Vehicle vehicle) {
         this.vehicle = vehicle; // 생성자로 전달받은 객체를 할당
     }
+}
 
-    public void showVehicle(){
-        vehicle.show();
+public class Customer {
+    private Vehicle vehicle;
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle; // set 메서드를 통해 의존 객체 전달
     }
 }
 ~~~
