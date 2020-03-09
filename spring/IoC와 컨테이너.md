@@ -74,6 +74,7 @@ set 메서드를 통한 방식의 장점은 메서드의 이름으로 어떤 객
 스프링 IoC 컨테이너는 빈 설정은 XML, 자바 코드, 그루비 코드의 세가지 방법으로 가능하다.
 여기서 빈(bean)은 스프링 IoC가 관리하는 객체라고 생각 하면 된다.
 
+### 1. XML을 이용한 설정
 ~~~ java
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -96,7 +97,7 @@ set 메서드를 통한 방식의 장점은 메서드의 이름으로 어떤 객
 \<constructor-arg\> 태그: 생성자 방식의 태그
 \<property\> 태그: 프로퍼티 방식을 사용하는 경우 사용하며 name은 프로퍼티의 이름, ref는 다른 빈의 식별자를 입력한다.  
 
-xml 설정파일을 만들었다면 GenericXmlApplicationContext 클래스를 사용하여 스프링 컨테이너를 생성하여 컨테이너에 bean 개겣가 생성됬는지 확인 할 수 있다.
+xml 설정파일을 만들었다면 GenericXmlApplicationContext 클래스를 사용하여 스프링 컨테이너를 생성하여 컨테이너에 bean 객체가 생성됬는지 확인 할 수 있다.
 ~~~ java
 public class Sample {
     public static void main(String[] args) {
@@ -105,5 +106,70 @@ public class Sample {
         System.out.println((bookRepository!=null)); //true
         
     }
+}
+~~~
+위의 방식의 단점은 일일히 하나씩 빈을 등록해야해서 번거롭다.  
+그래서 등장한 방식이 context의 component-scan이다. 이 방법은 설정한 패키지부터 빈을 스캔하여 빈으로 등록하는 것이다.
+~~~java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.giantdwarf.book" />
+</beans>
+~~~
+그리고 스캔할 클래스에 @Component 애노테이션을 적용하고 <context:component-scan> 태그를 이용하여 검색할 패키지를 지정하면 된다.  
+이떄 @Autowired와 같은 애노테이션을 이용하여 프로퍼티에 의존객체를 전달할 수 있다.
+~~~java
+@Component
+public class BookService {
+
+    @Autowired
+    BookRepository bookRepository;
+
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+}
+~~~
+
+### 2. 자바 코드을 이용한 설정
+자바 코드를 사용하면 좀더 직관적으로 설정할 수 있다.
+자바코드를 스프링 설정 정보로 사용하기위해서는 @Configuration과 @Bean 애노테이션을 사용하면된다.
+~~~java
+@Configuration
+public class ApplicaionConfig {
+
+    @Bean
+    public BookRepository bookRepository(){
+        return new BookRepository();
+    }
+
+    @Bean
+    public BookService bookService(){
+        BookService bookService = new BookService();
+        bookService.setBookRepository(bookRepository());
+        return bookService;
+    }
+}
+~~~
+자바 설정 클래스를 이용해 컨테이너를 생성하기 위해서는 AnnotationConfigApplicationContext 클래스를 사용한다.
+~~~java
+public class Sample {
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext  ctx = new AnnotationConfigApplicationContext(ApplicaionConfig.class);
+        BookRepository bookRepository = (BookRepository) ctx.getBean("bookRepository");
+        System.out.println((bookRepository!=null)); //true
+
+    }
+}
+~~~
+자바 설정 파일에서 역시 @ComponentScan 애노테이션을 통해 컴포넌트 스캔을 지원한다.
+~~~java
+@Configuration
+@ComponentScan(basePackageClasses = Sample.class)
+public class ApplicaionConfig {
 }
 ~~~
