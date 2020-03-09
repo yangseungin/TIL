@@ -62,8 +62,48 @@ public class Customer {
 }
 ~~~
 new를 통해 직접 객체를 생성하던 방식에서 외부로 부터 전달받는 방식으로 변경하였다.  
-이 경우 요구사항이 바뀌어도 Customer 클래스의 코드는 수정할 필요없이 변경되는 부분은 제한된다.
+이 경우 요구사항이 바뀌어도 Customer 클래스의 코드는 수정할 필요없이 변경되는 부분은 제한된다.  
+생성자 방식의 장점은 객체의 생성시점에 의존하는 객체를 모두 전달받을 수 있어서 전달받은 객체가 정상인지 확인하는 코드를 추가하여, 생성시점 이후에는 그 객체가 사용가능 상태임을 보장할 수 있다.  
+set 메서드를 통한 방식의 장점은 메서드의 이름으로 어떤 객체를 의존하는지 이름으로 알 수 있다.  
 
-### 스프링 IoC 컨테이너
+# 스프링 IoC 컨테이너
 스프링에서는 컨테이너(Container)라는 곳에서 스프링 IoC가 관리하는 객체인 bean 들을 생성과 관리를 담당하며 의존성을 관리한다.
 스프링 IoC 컨테이너에 등록되는 빈들은 기본적으로 싱글톤 scope의 빈으로 등록된다.
+
+## 스프링 DI 설정
+스프링 IoC 컨테이너는 빈 설정은 XML, 자바 코드, 그루비 코드의 세가지 방법으로 가능하다.
+여기서 빈(bean)은 스프링 IoC가 관리하는 객체라고 생각 하면 된다.
+
+~~~ java
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="boookService"
+          class="com.giantdwarf.book.BookService">
+        <property name="bookRepository" ref="bookRepository"/>
+    </bean>
+
+    <bean id="bookRepository"
+          class="com.giantdwarf.book.BookRepository">
+
+    </bean>
+
+</beans>
+~~~
+\<bean\> 태그: 생성할 객체를 지정할 때 사용하며 id는 빈의 식별자, class는 생성할 객체의 클래스 이름이다.  
+\<constructor-arg\> 태그: 생성자 방식의 태그
+\<property\> 태그: 프로퍼티 방식을 사용하는 경우 사용하며 name은 프로퍼티의 이름, ref는 다른 빈의 식별자를 입력한다.  
+
+xml 설정파일을 만들었다면 GenericXmlApplicationContext 클래스를 사용하여 스프링 컨테이너를 생성하여 컨테이너에 bean 개겣가 생성됬는지 확인 할 수 있다.
+~~~ java
+public class Sample {
+    public static void main(String[] args) {
+        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application.xml");
+        BookRepository bookRepository = (BookRepository) ctx.getBean("bookRepository");
+        System.out.println((bookRepository!=null)); //true
+        
+    }
+}
+~~~
