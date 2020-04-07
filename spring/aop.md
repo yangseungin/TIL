@@ -30,10 +30,115 @@ Advice를 Weaving하는 방법은 총 3가지이다.
 
 <img src="https://github.com/yangseungin/TIL/blob/master/spring/%EC%82%AC%EC%A7%84/%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%20%EA%B8%B0%EB%B0%98%EC%9D%98%20%ED%94%84%EB%A1%9D%EC%8B%9C.png?raw=true" width="70%">
 
+위의 프록시 구조로 성능 측정을 하는 예시를 확인해보자.
+~~~ java
+public interface EventService {
+    void createEvent();
+    void stopEvent();
+    void restartEvent();
+}
+~~~
+~~~ java
+@Service
+public class TestEventService implements EventService {
+
+    @Override
+    public void createEvent() {
+        long start = System.currentTimeMillis();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("create event");
+        System.out.println(System.currentTimeMillis() - start);
+
+    }
+
+    @Override
+    public void stopEvent() {
+        long start = System.currentTimeMillis();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("stop event");
+        System.out.println(System.currentTimeMillis() - start);
+    }
+
+    @Override
+    public void restartEvent() {
+        System.out.println("restart event");
+    }
+
+}
+~~~
+메서드의 실행시간을 측정하는 하고자 할 떄 시간을 측정하여 출력하는 부분들이 공통적인 관심사항이다. 실행시간 측정을 위한 흩어진 관심사들이 기존 코드에 추가되는 문제점이 있는데 이를 프록시 패턴을 사용하여 해결할 수 있다.
+
+~~~ java
+@Primary
+@Service
+public class ProxyEventService implements EventService {
+
+    @Autowired
+    TestEventService testEventService;
+
+    @Override
+    public void createEvent() {
+        long start = System.currentTimeMillis();
+        testEventService.createEvent();
+        System.out.println(System.currentTimeMillis() - start);
+    }
+
+    @Override
+    public void stopEvent() {
+        long start = System.currentTimeMillis();
+        testEventService.stopEvent();
+        System.out.println(System.currentTimeMillis() - start);
+    }
+
+    @Override
+    public void restartEvent() {
+        testEventService.restartEvent();
+
+    }
+}
+~~~
+하지만 중복코드가 있는 문제점과 새로 프록시 클래스를 만들어야하는 번거로움 등 여러 문제들이 남아 있다. 프록시를 클래스로 만들어서 사용하였지만 스프링AOP를 통해 동적으로 프록시 객체를 만들어서 사용할 수 있다.  
 
 
-프록시 클래스를 작성할 수 있지만. 매번 작성해야하나?
-여러 클래스의 여러메소드에 적용하려면..?
-동적으로 프록시객체를 만들 수있음(애플리케이션이 동작하는 중에 동적으로 객체의 프록시객체를 만들 수 있음)
-BeanPostProcessor
-인터페이스가 있는경우는 인터페이스타입으로 주입받는게 가장 좋음.
+스프링 AOP를 사용하려면 의존성을 추가해야 한다.  
+스프링 부트가 아니라면 spring-aop와 aspectjweaver를 추가해주면 된다.
+~~~ java
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+~~~
+
+@Aspect 에노테이션을 사용하여 Aspect 클래스를 구현하였고 @Component을 통해 스프링 빈으로 등록하였다.
+
+~~~ java
+@Component
+@Aspect
+public class MeasureAspect {
+
+    @Around("execution(* com.giantdwarf.aop.EventService.*(..))")
+    public Object timeMeasure(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+        long start = System.currentTimeMillis();
+        Object proceed = proceedingJoinPoint.proceed();
+        System.out.println(System.currentTimeMillis()-start);
+        return proceed;
+    }
+}
+~~~
+@Around에 execution pointcut 표현식을 사용하여 어디에 적용할지를 정의할 수 있다.(@annotation과 bean으로도 가능하다)
+
+@Around외에도 Aspect 실행 시점을 지정할수 있는 다양한 애노테이션들이 있다.  
+
+- @Before(): 대상 객체의 메서드 실행 이전에 호출
+- @AfterReturning(): 대상 객체의 메서드가 정상적으로 실행 된 이후 호출
+- @AfterThrowing(): 대상 객체의 메서드가 Exception을 발생시킨 경우 호출
+- @After(): 타겟 메서드 실행 이후 호출
+- @Around(): 타겟 메서드를 감싸서 타겟 메서드 호출 전,후에 어드바이스 기능 수행
