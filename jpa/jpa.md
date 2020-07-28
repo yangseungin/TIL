@@ -76,3 +76,7 @@ em.remove(member);
 5. 데이터베이스 벤더 독립성
     - 특정 데이터베이스 기술에 종속되지 않도록 해준다.
     - (페이징: Oracle-rownum, MySQL- limit)
+
+# 참고문서
+자바 ORM 표준 JPA 프로그래밍 - 김영한  
+https://www.inflearn.com/course/ORM-JPA-Basic/
