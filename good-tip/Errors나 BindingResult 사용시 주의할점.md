@@ -187,7 +187,11 @@ public class MemoFormValidator implements Validator {
 ## - 비정상적인 값 입력 시
 에러 메세지를 보여준다.
 
-<img src="https://github.com/yangseungin/TIL/blob/master/spring/%EC%82%AC%EC%A7%84/validator/error.png?raw=true" width="70%">
+<img src="https://github.com/yangseungin/TIL/blob/master/spring/%EC%82%AC%EC%A7%84/validator/error.png?raw=true" width="70%">  
+
+값의 길이나 필수값과 같은정보는 JSR 303 애노테이션(@NotBlank, @Length)으로 검증하여 Errors에 에러가 담기게 되는데 예시로 든 코드가 애매한 것 같다...
+메모가 아니라 줒ㅇ복이 허용되지 않는 title과 같은 제약사항을두고 Validator에서 해당 제목의 메모가 있는지 체크하는 식으로 수정하는게 좋을 것 같다.
+
 
 ## - 정상적인 값 입력시
 저장 후 리스트를 보여준다.
