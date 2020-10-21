@@ -1,92 +1,45 @@
-# 단방향 연관관계
-엔티티의 관계가 한쪽만 참조하는 것을 단방향 관계라고 한다.  
+git, github을 사용하면서 자주 사용하는 커맨드를 정리하였다.
 
-## 객체의 연관관계와 테이블에서의 연관관계의 차이
+# Git
+로컬에서 관리되는 버전 관리 시스템
+- git init: 현재 디렉토리를 로컬 저장소로 설정할 때
+- git status: Git이 인식하고 있는 파일 상태를 확인할 떄
+  - git이 관리하는 파일은 Tracked와 Untracked로 나뉜다.
+  - Tracked: 파일의 상태가 Git에 의해 추적 중인 상태로 3가지로 분류된다.
+    1. Unmodified: 변경된 내용이 없는 상태
+    2. Modified: 변경된 내용이 있는 상태
+    3. Staged: 변경된 내용이 staging area에 올라간 상태
+    <img src="https://github.com/yangseungin/TIL/blob/master/git/%EC%82%AC%EC%A7%84/git%20%ED%8C%8C%EC%9D%BC%20%EB%9D%BC%EC%9D%B4%ED%94%84%EC%82%AC%EC%9D%B4%ED%81%B4.png?raw=true" width="80%">
+  - Untracked: 파일을 추적하고 있지 않음
+- git add [파일명 or 디렉토리명]: 수정사항이 있는 파일 혹은 디렉토리를 staging area에 올림
+- git reset [파일명]: staging area에 올린 파일을 다시 내리기
+- git reset [옵션] [커밋 아이디]
+  - 옵션에 따라 다르게 수행함
+  - --soft: index를 보존(staged상태)
+  - --mixed: index 취소(unstaged상태) 옵션을 주지 않으면 기본으로 mixed로 동작
+  - --hard: index 취소(unstaged상태), 워킹디렉토리의 파일 삭제
+- git commit: 현재 staging area에 있는 것들을 확정
+  - 여러 옵션이 존재한다
+  - git commit -m "메세지": 커밋 메세지를 "메세지"로 하여 커밋
+  - git commit -a: Modified상태의 파일을 자동으로 add 후 커밋
+- git diff [커밋1 아이디] [커밋2 아이디]: 두 커밋의 차이점 비교
+- git tag [태그명] [커밋 아이디]: 특정 커밋에 태그를 붙임
+- git branch [새 브랜치 이름]: 새로운 브랜치 생성
+- git checkout [새 브랜치 이름]: 브랜치로 이동
+  - -b 옵션을 주면 브랜치를 생성하고 바로 이동한다
+  ~~~
+  git checkout -b
+  ~~~
+- git branch -d [브랜치 이름]: 브랜치 삭제
+- git merge [브랜치 이름]: 현재 브랜치에 다른 브랜치를 머지
+- git help [커맨드 이름]: 해당 커맨드의 자세한 사용 메뉴얼 출력
 
-<img src="https://github.com/yangseungin/TIL/blob/master/jpa/%EC%82%AC%EC%A7%84/%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84/%EB%8B%A4%EB%8C%80%EC%9D%BC%20%EB%8B%A8%EB%B0%A9%ED%96%A5.png?raw=true" width="80%"> 
+# Github
+클라우드 저장소로 관리되는 버전 관리 시스템
+- git push: 로컬 저장소에 commit 된 내용을 원격저장소에 추가로 파라미터가 없으면 origin 저장소에 푸쉬
+  - git push [원격저장소 이름] [브랜치명]: 원격저장소의 해당브랜치에 푸쉬
+- git pull : 리모트 레포지토리의 내용을 로컬 레포지토리로 가져오기
+- git clone [리포트 레포지토리 주소]: Github에 해당 url의 프로젝트를 내 PC로 가져오기
 
-객체는 참조를 통해 연관관계를 맺어 언제나 단방향이다. 따라서 객체 간 연관관계를 양방향으로 만들려면 반대쪽도 필드를 추가해야 한다.  
-하지만 테이블에서는 외래키를 통해 연관관계를 맺으며 A join B가 되면 B join A도 가능하다.
-## 객체 관계 매핑
-~~~ java
-@Entity
-public class Member {
-  @Id @GeneratedValue
-  private Long id;
-  
-  @Column(name = "USERNAME")
-  private String name;
-    
-  @ManyToOne
-  @JoinColumn(name = "TEAM_ID")
-  private Team team;
-  ...
-}
-@Entity
-public class Team {
-  @Id @Column(name = "TEAM_ID")
-  private String id;
-  
-  private String name;
-}
-~~~
-@ManyToOne: 다대일 관계를 의미하며 Member입장에서 Team은 다대일이다.  
-@JoinColumn(name="TEAM_ID"): 외래키를 매핑할때 사용하며 Team 테이블의 TEAM_ID이라는 이름의 외래키와 매핑한다.  
-아래 사진은 객체의 참조와 테이블의 외래키를 연관관계 매핑한 후의 모습이다.  
-
-<img src="https://github.com/yangseungin/TIL/blob/master/jpa/%EC%82%AC%EC%A7%84/%EC%97%B0%EA%B4%80%EA%B4%80%EA%B3%84/%EA%B0%9D%EC%B2%B4%20%EA%B4%80%EA%B3%84%20%EB%A7%A4%ED%95%91.png?raw=true" width="80%">  
-
-# 연관관계 사용
-## 연관관계 저장
-~~~ java
-Team team = new Team();
-team.setName("TeamA");
-em.persist(team);   //팀 저장
-​
-Member member = new Memeber();
-member.setName("member1");
-member.setTeam(team);//단방향 연관관계 설정
-em.persist(member);
-
-//1차캐시 정리
-em.flush(); 
-em.clear()
-
-Member findMember = em.find(Member.class,  member.getId());
-//참조를 사용해서 연관관계 조회
-Team findTeam = findMember.getTeam();
-~~~
-Team과 Member를 저장 후 연관관계를 설정하였다. 정상적으로 저장됐는지 확인하기 위해 select 쿼리를 확인하기 위해 1차 캐시를 Clear후 find를 하여 회원과 팀이 정상적으로 저장되었음을 확인할 수 있다.
-
-## 연관관계 수정
-~~~ java
-// Member1은 TeamA에 소속된 상태
-
-//새로운 팀 등록
-Team newTeam = new Team();
-team.setName("TeamB");
-em.persist(team);  
-
-//Member1의 팀을 TEAMB로 변경
-Member member = em.find(Member.class, "member1");
-member.setTeam(newTeam);
-~~~
-새로운 팀을 저장한 후 member1의 팀을 2로 설정만 하였다.  
-다시 저장하거나 update하는 메서드 없이 엔티티의 값을 변경하면 트랜잭션을 커밋 할때 flush가 발생하면서 변경을 감지하고 DB에 자동으로 업데이트된다.
-
-## 연관관계 제거 및 엔티티 삭제
-~~~ java
-Member member1 = em.find(Member.class, "member1");
-member1.setTeam(null)// 연관관계 제거
-
-Team teamA = em.find(Team.class, "teamA");
-em.remove(teamA) //연관관계 삭제
-~~~
-연관관계를 null로 설정하면 TEAM_ID를 null로 하는 update쿼리가 발생한다.  
-엔티티를 삭제할 때는 외래키 제약조건으로 인해 연관관계를 모두 제거한 후 삭제해야 한다.
-
-
-
-# 참고문서
-자바 ORM 표준 JPA 프로그래밍 - 김영한  
-https://www.inflearn.com/course/ORM-JPA-Basic/
+# 이미지 출처
+https://git-scm.com/book/ko/v2/
