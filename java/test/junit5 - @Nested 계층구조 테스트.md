@@ -15,6 +15,9 @@ Junit5부터 `@Nested`를 사용하여 계층적으로 테스트 코드를 작�
 
 ## Calculator 클래스
 
+좋은 계산기 코드는 아니지만 간단히 테스트를 위해 작성한 계산기 코드이니 넘어가도록 하자.  
+mul()의 경우는 두 수의 곱이 int의 범위를 초과하면, div()의 경우는 0으로 나누면 RuntimeException을 던지도록 하였다.
+
 ```java
 public class Calculator {
     public double sum(int num1, int num2) {
@@ -42,8 +45,7 @@ public class Calculator {
 }
 ```
 
-sum()과 sub()의 경우도 인트 범위를 넘어갈 경우를 확인해야 하나 간단한 예제이니 넘어가자.  
-mul()의 경우는 두 수의 곱이 int의 범위를 초과하면, div()의 경우는 0으로 나누면 RuntimeException을 던지도록 하였다.
+## CalculatorTest 클래스
 
 ```java
 import org.junit.jupiter.api.DisplayName;
@@ -95,11 +97,17 @@ class CalculatorTest {
 }
 ```
 
-mul()과 div()메소드는 예외상황에 대한 테스트가 추가되었다.
-
+실행 결과  
 <img src="https://github.com/yangseungin/TIL/blob/master/java/%EC%82%AC%EC%A7%84/junit/non%20hierarchical%20test.png?raw=true" width="80%">
 
+mul()과 div()메소드는 예외상황에 대한 테스트가 추가되었다.  
 실행결과가 한눈에 들어오지 않고 같은 메서드의 테스트 결과가 따로 있어 보기 불편하다. mul()과 div()를 @Nested를 사용하여 변경해보자.
+
+# 계층구조로 변경하기
+
+## CalculatorHierarchicalTest 클래스
+
+테스트 결과가 계층적인 구조로 되었고 테스트가 한 줄로 읽었을 때 하나의 자연스러운 문장이 되어 이해하기 쉽다.
 
 ```java
 import org.junit.jupiter.api.DisplayName;
@@ -177,8 +185,7 @@ class CalculatorHierarchicalTest {
 ```
 
 실행 결과  
-<img src="https://github.com/yangseungin/TIL/blob/master/java/%EC%82%AC%EC%A7%84/junit/hierarchical%20test.png?raw=true" width="80%">  
-테스트 결과가 계층적인 구조로 되었고 테스트가 한 줄로 읽었을 때 하나의 자연스러운 문장이 되어 이해하기 쉽다.
+<img src="https://github.com/yangseungin/TIL/blob/master/java/%EC%82%AC%EC%A7%84/junit/hierarchical%20test.png?raw=true" width="80%">
 
 # 참고 문서
 
