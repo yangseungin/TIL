@@ -23,3 +23,12 @@ TIL
 4. [스트림API- 최종연산](https://github.com/yangseungin/TIL/blob/master/java/4.%EC%8A%A4%ED%8A%B8%EB%A6%BCAPI%20%EC%B5%9C%EC%A2%85%EC%97%B0%EC%82%B0.md)
 5. [Optional](https://github.com/yangseungin/TIL/blob/master/java/5.Optional.md)
 6. [java.time](https://github.com/yangseungin/TIL/blob/master/java/6.%20java.time.md)
+
+# good tip
+
+## 인텔리제이
+
+- [단축키](https://github.com/yangseungin/TIL/blob/master/good-tip/%EC%9E%90%EC%A3%BC%EC%93%B0%EB%8A%94%20intellij%20%EB%8B%A8%EC%B6%95%ED%82%A4.md)
+- [lombok 설정](https://github.com/yangseungin/TIL/blob/master/good-tip/IntelliJ%20Lombok%20%EC%84%A4%EC%A0%95.md)
+- [lombok 자동 import \*처리 방지](https://github.com/yangseungin/TIL/blob/master/good-tip/IntelliJ%20%EC%9E%90%EB%8F%99%20import%EC%8B%9C%20*%EC%B2%98%EB%A6%AC%20%EB%B0%A9%EC%A7%80.md)
+- [DatabseTool에서 구조가 표시되지 않을때](https://github.com/yangseungin/TIL/blob/master/good-tip/IntelliJ%20DatabaseTool%EC%97%90%EC%84%9C%20%EA%B5%AC%EC%A1%B0%EA%B0%80%20%ED%91%9C%EC%8B%9C%EB%90%98%EC%A7%80%20%EC%95%8A%EC%9D%84%20%EB%95%8C.md)
