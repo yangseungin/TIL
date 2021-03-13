@@ -39,6 +39,7 @@ TIL
 
 - [Validation failed for query for method](https://github.com/yangseungin/TIL/blob/master/good-tip/Validation%20failed%20for%20query%20for%20method...%EC%98%A4%EB%A5%98.md)
 - [Errors나 BindingResult 사용시 주의할 점](https://github.com/yangseungin/TIL/blob/master/good-tip/Errors%EB%82%98%20BindingResult%20%EC%82%AC%EC%9A%A9%EC%8B%9C%20%EC%A3%BC%EC%9D%98%ED%95%A0%EC%A0%90.md)
+- [패스워드 암호화](https://github.com/yangseungin/TIL/blob/master/spring/%EC%8B%9C%ED%81%90%EB%A6%AC%ED%8B%B0/%ED%8C%A8%EC%8A%A4%EC%9B%8C%EB%93%9C%20%EC%95%94%ED%98%B8%ED%99%94.md)
 
 ## MacOS
 
