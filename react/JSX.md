@@ -58,8 +58,6 @@ function App() {
 }
 ```
 
-##
-
 리액트에서는 JSX로 작성된 코드를 createElement함수를 호출하는 코드로 변환하기 위해 바벨을 사용한다.
 
 ```javascript
