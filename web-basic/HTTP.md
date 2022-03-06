@@ -33,3 +33,6 @@ HTTP 프로토콜 상에서 통신을 할떄 필요한 패킷에 대한 정보�
 
 ## message-body
 실제 전송할 데이터로 html, 이미지, 영상, JSON 등 byte로 표현할 수 있는 모든 데이터를 담을 수 있다.
+
+# 참고문서
+https://www.inflearn.com/course/http-웹-네트워크/
