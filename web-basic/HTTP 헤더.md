@@ -36,7 +36,5 @@ Accept: text/*, text/plain, text/plain;format=flowed, */*
 ```
 text/plain;format=flowed 다음 text/plain, text/*, */* 순  
 구체적으로 명시한것이 가장 우선이다.  
-
-
 # 참고문서
 https://www.inflearn.com/course/http-웹-네트워크/
