@@ -1,7 +1,7 @@
 # HTTP 특성
-HTTP의 가장큰 특성 두가지로 무상태(statusless)와 비연결성(connectionless)가 있다.
+HTTP의 가장큰 특성 두가지로 무상태(stateless)와 비연결성(connectionless)가 있다.
 
-## Statusless
+## Stateless
 서버가 클라이언트의 이전 상태를 보관하지 않는다는 의미.  
 상태를 보관하지 않으므로 클라이언트의 응답에 어떤 서버가 응답을 하더라도 상관이 없다.(요청이 많이 증가해도 서버를 증설하여 쉽게 해결할 수 있다.)
 
