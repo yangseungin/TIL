@@ -36,7 +36,26 @@ HTTP 프로토콜을 사용하기 때문에 응답을 캐시 할 수 있다.
 ## layered system  
 시스템을 몇 개의 계층으로 분리할 수 있다. 클라이언트는 서버에 직접 연결되어 있는지 중간에 연결되어 있는지를 알 수 없다.
 
+## code-on-demand
+서버에서 코드를 클라이언트로 보내서 실행할 수 있어야 한다. 선택사항으로 반드시 충족해야 할 필요는 없다.
+
+# 더 나은 RESTful API를 위한 10가지 모범사례
+그래서 처음 질문한 동사를 사용한것에 대한 답변은 아래에서 할 수 있을 것 같다.
+
+1. 명사는 사용하되 동사는 사용하지 않는다
+2. GET 메서드 및 쿼리 매개변수는 상태를 변경해서는 안된다
+3. 복수 명사를 사용하라
+4. 관계에 대한 하위 리소스 사용하라
+5. 직렬화 형식에 HTTP 헤더 사용하라
+6. HATEOAS 사용하라
+7. 컬렉션에 대한 필터링, 정렬, 필드 선택 및 페이징을 제공하라
+8. API 버전 관리
+9. HTTP 상태 코드로 오류 처리
+10. HTTP 메서드 오버라이딩 허용
+
+
 
 # 참고문서
 [DEVIEW - 그런 REST API로 괜찮은가](https://www.youtube.com/watch?v=RP_f5dMoHFc)  
 [위키피디아 - Representational state transfer](https://en.wikipedia.org/wiki/Representational_state_transfer#Layered_system)  
+[10 best practices for better restful api](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
